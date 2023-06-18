@@ -37,7 +37,7 @@ function update_current_git_vars() {
 
     local gitstatus="$__GIT_PROMPT_DIR/gitstatus.py"
     _GIT_STATUS=$(python3 ${gitstatus} 2>/dev/null)
-     __CURRENT_GIT_STATUS=("${(@s: :)_GIT_STATUS}")
+    __CURRENT_GIT_STATUS=("${(@s: :)_GIT_STATUS}")
     GIT_BRANCH=$__CURRENT_GIT_STATUS[1]
     GIT_AHEAD=$__CURRENT_GIT_STATUS[2]
     GIT_BEHIND=$__CURRENT_GIT_STATUS[3]
@@ -48,6 +48,8 @@ function update_current_git_vars() {
     GIT_STASHED=$__CURRENT_GIT_STATUS[8]
     GIT_CLEAN=$__CURRENT_GIT_STATUS[9]
     GIT_DELETED=$__CURRENT_GIT_STATUS[10]
+    GIT_LINES_MODIFIED=$__CURRENT_GIT_STATUS[11]
+    GIT_LINES_DELETED=$__CURRENT_GIT_STATUS[12]
 
     if [ -z ${ZSH_THEME_GIT_SHOW_UPSTREAM+x} ]; then
         GIT_UPSTREAM=
@@ -67,6 +69,15 @@ git_super_status() {
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD%{${reset_color}%}"
       fi
       STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_SEPARATOR"
+      if [ "$GIT_LINES_MODIFIED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_LINES_MODIFIED$GIT_LINES_MODIFIED%{${reset_color}%}"
+      fi
+      if [ "$GIT_LINES_DELETED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_DELETED$GIT_LINES_DELETED%{${reset_color}%}"
+      fi
+      if [ "$GIT_LINES_MODIFIED" -ne "0" ] || [ "$GIT_LINES_DELETED" -ne "0" ]; then
+          STATUS="$STATUS "
+      fi
       if [ "$GIT_STAGED" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED$GIT_STAGED%{${reset_color}%}"
       fi
@@ -94,17 +105,17 @@ git_super_status() {
 }
 
 # Default values for the appearance of the prompt.
-ZSH_THEME_GIT_PROMPT_PREFIX="("
-ZSH_THEME_GIT_PROMPT_SUFFIX=")"
-ZSH_THEME_GIT_PROMPT_SEPARATOR="|"
-ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[magenta]%}"
+ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}\uE0A0 "
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
+ZSH_THEME_GIT_PROMPT_SEPARATOR=""
 ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{●%G%}"
 ZSH_THEME_GIT_PROMPT_CONFLICTS="%{$fg[red]%}%{✖%G%}"
 ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[blue]%}%{✚%G%}"
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[blue]%}%{-%G%}"
+ZSH_THEME_GIT_PROMPT_LINES_MODIFIED="%{$fg[green]%}%{✚%G%}"
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}%{-%G%}"
 ZSH_THEME_GIT_PROMPT_BEHIND="%{↓%G%}"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{↑%G%}"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}%{…%G%}"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}%{?%G%}"
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg_bold[blue]%}%{⚑%G%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}%{✔%G%}"
 ZSH_THEME_GIT_PROMPT_UPSTREAM_SEPARATOR="->"

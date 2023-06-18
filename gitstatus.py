@@ -88,6 +88,14 @@ if not changed and not deleted and not staged and not conflicts and not untracke
 else:
     clean = 0
 
+lines_mod, lines_del = 0, 0
+po = Popen(['git', 'diff', '--numstat'], env=dict(os.environ, LANG="C"), stdout=PIPE, stderr=PIPE)
+stdout, sterr = po.communicate()
+for line in stdout.decode('utf-8').splitlines():
+    parts = line.split()
+    lines_mod += int(parts[0])
+    lines_del += int(parts[1])
+
 out = ' '.join([
     branch,
     str(ahead),
@@ -98,6 +106,8 @@ out = ' '.join([
     str(len(untracked)),
     str(stashed),
     str(clean),
-    str(len(deleted))
+    str(len(deleted)),
+    str(lines_mod),
+    str(lines_del),
 ])
 print(out, end='')
