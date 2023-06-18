@@ -68,6 +68,9 @@ git_super_status() {
       if [ "$GIT_AHEAD" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD%{${reset_color}%}"
       fi
+      if [ "$GIT_BEHIND" -ne "0" ] || [ "$GIT_AHEAD" -ne "0" ]; then
+          STATUS="$STATUS "
+      fi
       STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_SEPARATOR"
       if [ "$GIT_LINES_MODIFIED" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_LINES_MODIFIED$GIT_LINES_MODIFIED%{${reset_color}%}"
