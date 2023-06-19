@@ -96,11 +96,11 @@ git_super_status() {
       if [ "$GIT_UNTRACKED" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED%{${reset_color}%}"
       fi
-      if [ "$GIT_STASHED" -ne "0" ]; then
-          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STASHED$GIT_STASHED%{${reset_color}%}"
-      fi
-      if [ "$GIT_STAGED" -ne "0" ] || [ "$GIT_CONFLICTS" -ne "0" ] || [ "$GIT_CHANGED" -ne "0" ] || [ "$GIT_DELETED" -ne "0" ] || [ "$GIT_UNTRACKED" -ne "0" ] || [ "$GIT_STASHED" -ne "0" ]; then
+      if [ "$GIT_STAGED" -ne "0" ] || [ "$GIT_CONFLICTS" -ne "0" ] || [ "$GIT_CHANGED" -ne "0" ] || [ "$GIT_DELETED" -ne "0" ] || [ "$GIT_UNTRACKED" -ne "0" ]; then
           STATUS="$STATUS "
+      fi
+      if [ "$GIT_STASHED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STASHED$GIT_STASHED%{${reset_color}%} "
       fi
       if [ "$GIT_CLEAN" -eq "1" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CLEAN"
