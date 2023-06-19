@@ -96,6 +96,13 @@ for line in stdout.decode('utf-8').splitlines():
     lines_mod += int(parts[0])
     lines_del += int(parts[1])
 
+po = Popen(['git', 'diff', '--numstat', '--cached'], env=dict(os.environ, LANG="C"), stdout=PIPE, stderr=PIPE)
+stdout, sterr = po.communicate()
+for line in stdout.decode('utf-8').splitlines():
+    parts = line.split()
+    lines_mod += int(parts[0])
+    lines_del += int(parts[1])
+
 out = ' '.join([
     branch,
     str(ahead),
